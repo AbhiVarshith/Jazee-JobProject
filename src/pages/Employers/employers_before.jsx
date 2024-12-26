@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Employers= () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-800 text-gray-100 min-h-screen flex flex-col items-center justify-center">
       <nav className="w-full flex justify-between items-center py-4 px-8 bg-gray-900 text-gray-100 fixed top-0 left-0">
@@ -11,7 +13,7 @@ const Employers= () => {
           <a href="#" className="text-2xl hover:underline">Pricing</a>
         </div>
         <div className="flex gap-4">
-          <button className="text-sm font-medium">Get Started</button>
+          <button className="text-sm font-medium" onClick={()=>navigate('/Employers/Signup')}>Get Started</button>
           <button className="bg-teal-500 text-gray-900 px-4 py-2 rounded text-sm">Contact Us</button>
         </div>
       </nav>

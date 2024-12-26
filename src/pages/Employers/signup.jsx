@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 function EmployerSignup() {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    work_email: '',
     password: '',
-    confirmPassword: '',
     role: '',
     company_name: '',
     location: '',
@@ -22,49 +23,41 @@ function EmployerSignup() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Validation logic here (e.g., password matching, email format)
 
     // Make API request to your server (replace with actual endpoint)
-    fetch('/api/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Handle successful signup
-          alert('Signup successful!');
-          // Redirect to login page or other page
-        } else {
-          // Handle errors
-          console.error('Signup failed.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    try {
+      const response = await axios.post('http://localhost:5000/api/employee/signup', formData);
+      alert(response.data.message); // Show success message
+      navigate('/Employers/Home');
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Signup failed!');
+    }
   };
 
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Sign Up as an Employer</h1>
+        <button
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500" onClick={()=>navigate('/Employers/Signin')}>
+                Sign In if already a user
+        </button>
 
       <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <div className='mb-4'>
-            <label htmlfor='name' className='block text-sm font-medium text-gray-700'>
+            <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
                 Name (Include your first name) ;
             </label>
             <input
             type="text"
             id="name"
-            name="emp_name"
+            name="name"
             value={formData.name}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -77,9 +70,9 @@ function EmployerSignup() {
             </label>
             <input
               type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              id="work_email"
+              name="work_email"
+              value={formData.work_email}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
               required
@@ -101,7 +94,7 @@ function EmployerSignup() {
             />
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
               Confirm Password:
             </label>
@@ -114,7 +107,7 @@ function EmployerSignup() {
               className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
               required
             />
-          </div>
+          </div> */}
 
           <div className="mb-4">
             <label htmlFor="role" className="block text-sm font-medium text-gray-700">
@@ -217,14 +210,14 @@ function EmployerSignup() {
             />
           </div>
           <div className='mb-4'>
-            <label htmlfor='summary' className='block text-sm font-medium text-gray-700'>
+            <label htmlfor='company_summary' className='block text-sm font-medium text-gray-700'>
                 Company description (in less than 100 words);
             </label>
             <input
             type="text"
-            id="comp_summary"
-            name="comp_summary"
-            value={formData.comapany_summary}
+            id="company_summary"
+            name="company_summary"
+            value={formData.company_summary}
             onChange={handleChange}
             className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
